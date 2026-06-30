@@ -74,6 +74,16 @@
   .thumb:hover .play { transform: translate(-50%, -50%); }
 }
 
+@media (max-width: 768px) {
+  /* Larger tap target on mobile */
+  .play { width: 52px; height: 52px; }
+  .triangle {
+    border-top-width: 9px;
+    border-bottom-width: 9px;
+    border-left-width: 14px;
+  }
+}
+
 .triangle {
   width: 0;
   height: 0;

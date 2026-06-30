@@ -58,8 +58,15 @@
   background: rgba(0, 0, 0, 0.7);
   border-color: #ffffff;
 }
-.left  { left: 1.4rem; }
-.right { right: 1.4rem; }
+.left  { left: 1rem; }
+.right { right: 1rem; }
+
+@media (max-width: 768px) {
+  .left  { left: 0.6rem; }
+  .right { right: 0.6rem; }
+  .nav { font-size: 0.85rem; padding: 0.6rem 0.8rem; }
+  .counter { font-size: 0.65rem; bottom: 1rem; right: 1rem; }
+}
 
 /* ── Counter ── */
 .counter {
