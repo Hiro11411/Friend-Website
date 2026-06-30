@@ -391,7 +391,7 @@ function SceneContent({ activeSection, onNavigate, reducedMotion }: MainScenePro
       {/* Hero — [0, 0, 0] */}
       {show('hero') && (
         <group position={WORLD.hero}>
-          <Html center zIndexRange={[20, 0]} style={{ pointerEvents: 'none' }}>
+          <Html center zIndexRange={[40, 30]} style={{ pointerEvents: 'none' }}>
             <HeroContent onNavigate={onNavigate} />
           </Html>
         </group>
