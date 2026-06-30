@@ -17,6 +17,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { Canvas, useFrame, useThree } from '@react-three/fiber'
 import { Html } from '@react-three/drei'
+import Slideshow from '../components/ui/slideshow'
 import * as THREE from 'three'
 import {
   SectionName, FRAMINGS, WORLD,
@@ -388,6 +389,16 @@ function SceneContent({ activeSection, onNavigate, reducedMotion }: MainScenePro
         onArrival={handleArrival}
       />
 
+      {/* Slideshow — rendered as a drei Html fullscreen portal.
+          Sits below the hero text in z-order. Using Html (not a DOM element
+          behind the canvas) guarantees it renders on ALL mobile browsers —
+          the transparent-canvas approach fails on iOS/Android WebGL. */}
+      {show('hero') && (
+        <Html fullscreen zIndexRange={[5, 0]}>
+          <Slideshow />
+        </Html>
+      )}
+
       {/* Hero — [0, 0, 0] */}
       {show('hero') && (
         <group position={WORLD.hero}>
@@ -432,7 +443,7 @@ export function MainScene({ activeSection, onNavigate, reducedMotion }: MainScen
     <Canvas
       camera={{ position: [0, -0.6, 9], fov: 50 }}
       dpr={[1, 1]}
-      gl={{ antialias: false, alpha: true, powerPreference: 'high-performance' }}
+      gl={{ antialias: false, alpha: false, powerPreference: 'high-performance' }}
       frameloop="always"
       style={{ position: 'fixed', inset: 0, width: '100%', height: '100%', pointerEvents: 'none' }}
       onCreated={({ camera }) => {
@@ -445,6 +456,7 @@ export function MainScene({ activeSection, onNavigate, reducedMotion }: MainScen
         )
       }}
     >
+      <color attach="background" args={['#080808']} />
       <SceneContent
         activeSection={activeSection}
         onNavigate={onNavigate}
