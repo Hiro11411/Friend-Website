@@ -11,7 +11,10 @@
   flex-direction: column;
   align-items: flex-start;
   user-select: none;
+  pointer-events: none; /* pass through to slideshow — interactive children override */
 }
+/* Only these elements actually need to receive clicks/taps */
+.heroTitle, .viewWork { pointer-events: auto; }
 
 .heroEye {
   font-family: var(--font-mono);
@@ -525,42 +528,52 @@
 @media (max-width: 768px) {
 
   /* ── Hero ── */
-  .heroTitle { font-size: clamp(72px, 22vw, 180px); }
-  .heroSub   { font-size: 11px; letter-spacing: 0.16em; }
+  .heroTitle { font-size: clamp(64px, 20vw, 160px); }
+  .heroSub   { font-size: 10px; letter-spacing: 0.14em; }
+  .heroEye   { font-size: 11px; margin-bottom: 14px; }
 
   /* ── Work: 3-col → 1-col ── */
   .featGrid {
     grid-template-columns: 1fr;
-    gap: 20px;
+    gap: 16px;
   }
 
   /* ── About: side-by-side → stacked ── */
   .aboutTop {
     grid-template-columns: 1fr;
-    gap: 20px;
+    gap: 16px;
+    margin-bottom: 20px;
   }
   .profileImg {
     width: 100%;
-    height: 260px;
+    height: 220px;
     aspect-ratio: unset;
   }
-  .aboutTagline { font-size: 22px; }
-  .aboutBio p   { font-size: 13px; }
+  .aboutTagline { font-size: 20px; margin-bottom: 12px; }
+  .aboutBio p   { font-size: 12px; line-height: 1.55; margin-bottom: 8px; }
 
-  /* ── Toolkit: 3-col → 1-col ── */
-  .toolGrid { grid-template-columns: 1fr; }
+  /* ── Toolkit: 3-col → 1-col, tighter rows ── */
+  .toolGrid  { grid-template-columns: 1fr; }
+  .toolRow   { padding: 8px 0; }
+  .toolName  { font-size: 12px; }
+  .toolLevel { font-size: 8px; }
+  .toolNote  { font-size: 7px; }
 
   /* ── Section header / rule ── */
-  .sectionHead { gap: 10px; margin-bottom: 20px; }
-  .sectionIndex { font-size: 11px; letter-spacing: 0.16em; }
+  .sectionHead  { gap: 10px; margin-bottom: 16px; }
+  .sectionIndex { font-size: 10px; letter-spacing: 0.14em; }
 
   /* ── Contact ── */
-  .contactTitle { font-size: clamp(36px, 11vw, 80px); }
-  .contactEmail { font-size: clamp(16px, 5vw, 32px); }
+  .contactTitle { font-size: clamp(32px, 10vw, 70px); line-height: 0.88; }
+  .contactEmail { font-size: clamp(14px, 4.5vw, 28px); }
+  .contactCopy  { font-size: 13px; }
 
-  /* ── Section scroll area ── */
-  .section { max-height: 78vh; }
+  /* ── Section scroll area — tall enough but not overflowing ── */
+  .section { max-height: 76vh; padding-right: 4px; }
 
   /* ── Back button ── */
-  .backBtn { font-size: 10px; margin-top: 20px; }
+  .backBtn { font-size: 10px; margin-top: 16px; }
+
+  /* ── Toolkit section ── */
+  .toolkitSection { margin-bottom: 12px; }
 }

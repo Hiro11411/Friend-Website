@@ -1,10 +1,10 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import styles from './slideshow.module.css'
 
 /*
  * ── Edit slides here ─────────────────────────────────────────────
- * img  : path to image in public/media/ (or any URL)
- * text : two-line atmospheric overlay — leave arrays empty to hide
+ * img  : path in public/media/ or any URL
+ * text : overlay lines — keep empty arrays to hide
  * ─────────────────────────────────────────────────────────────────
  */
 const slides = [
@@ -22,6 +22,21 @@ const slides = [
 export default function Component() {
   const [current, setCurrent] = useState(0)
 
+  /*
+   * Progressive image loading — only load the current slide + the
+   * next one (preload). Previous slides stay cached once loaded.
+   * Prevents mobile from fetching all 9 large files at startup.
+   */
+  const [loaded, setLoaded] = useState<Set<number>>(() => new Set([0]))
+
+  useEffect(() => {
+    const next = (current + 1) % slides.length
+    setLoaded(prev => {
+      if (prev.has(current) && prev.has(next)) return prev
+      return new Set([...prev, current, next])
+    })
+  }, [current])
+
   const nextSlide = () => setCurrent(p => (p + 1) % slides.length)
   const prevSlide = () => setCurrent(p => (p - 1 + slides.length) % slides.length)
 
@@ -31,7 +46,8 @@ export default function Component() {
         <div
           key={i}
           className={`${styles.slide} ${i === current ? styles.active : ''}`}
-          style={{ backgroundImage: `url(${slide.img})` }}
+          /* Only set the background when this slide has been loaded */
+          style={loaded.has(i) ? { backgroundImage: `url(${slide.img})` } : undefined}
         >
           {slide.text.length > 0 && (
             <div className={styles.slideText}>
