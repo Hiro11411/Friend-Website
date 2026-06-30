@@ -1,0 +1,286 @@
+/* =================================================================
+   MARCO LO — PORTFOLIO v2
+   Aesthetic: "Precision Instrument" — pure monotone cinema.
+   All luminance, no colour. Deep blacks against warm off-white,
+   dramatic contrast, obsessive spacing.
+   ================================================================= */
+
+/* ---------- DESIGN TOKENS ---------- */
+:root {
+  /* Monotone palette — luminance only */
+  --black:      #080808;
+  --gray-950:   #0e0e0e;
+  --gray-900:   #141414;
+  --gray-850:   #1c1c1c;
+  --gray-800:   #252525;
+  --gray-750:   #2e2e2e;
+  --gray-700:   #383838;
+  --gray-600:   #4e4e4e;
+  --gray-500:   #676767;
+  --gray-400:   #888888;
+  --gray-300:   #aaaaaa;
+  --gray-200:   #c8c8c8;
+  --gray-100:   #e4e0db;   /* slightly warm — like old paper */
+  --white:      #f0ece7;   /* primary text, barely warm off-white */
+
+  /* Semantic surface aliases */
+  --bg:         var(--black);
+  --surface-1:  var(--gray-950);
+  --surface-2:  var(--gray-900);
+  --surface-3:  var(--gray-850);
+
+  /* Borders */
+  --border:       rgba(255, 255, 255, 0.07);
+  --border-mid:   rgba(255, 255, 255, 0.12);
+  --border-strong:rgba(255, 255, 255, 0.20);
+
+  /* Typography */
+  --font-display: "Bebas Neue", "Arial Narrow", Arial, sans-serif;
+  --font-body:    "DM Sans", system-ui, sans-serif;
+  --font-mono:    "JetBrains Mono", "Courier New", monospace;
+
+  /* Layout */
+  --max-w:       1280px;
+  --pad:         clamp(1.5rem, 5vw, 4rem);
+  --section-py:  clamp(5rem, 12vw, 10rem);
+
+  /* Motion */
+  --ease-cine:   cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-snap:   cubic-bezier(0.7, 0, 0.2, 1);
+  --ease-out:    cubic-bezier(0.4, 0, 0.2, 1);
+  --dur-fast:    200ms;
+  --dur-mid:     450ms;
+  --dur-slow:    800ms;
+}
+
+/* ---------- RESET ---------- */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+body {
+  overflow: hidden; /* single-canvas world — no page scroll */
+  background: var(--bg);
+  color: var(--white);
+  font-family: var(--font-body);
+  font-weight: 300;
+  line-height: 1.65;
+  letter-spacing: 0.01em;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* very subtle warm radial breath */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(
+    100% 80% at 50% -5%,
+    rgba(255, 255, 255, 0.025),
+    transparent 55%
+  );
+  pointer-events: none;
+  z-index: 0;
+}
+
+img, svg, canvas { display: block; max-width: 100%; }
+a { color: inherit; text-decoration: none; }
+ul, ol { list-style: none; }
+em { font-style: italic; }
+button { cursor: pointer; border: none; background: none; }
+
+::selection {
+  background: var(--white);
+  color: var(--black);
+}
+
+/* ---------- GLOBAL GRAIN overlay ---------- */
+.grain {
+  position: fixed;
+  inset: -50%;
+  width: 200%;
+  height: 200%;
+  z-index: 60;
+  pointer-events: none;
+  opacity: 0.04;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  animation: grainShift 0.55s steps(3) infinite;
+}
+@keyframes grainShift {
+  0%   { transform: translate(0, 0); }
+  33%  { transform: translate(-3%, 2%); }
+  66%  { transform: translate(2%, -3%); }
+  100% { transform: translate(-1%, 1%); }
+}
+
+/* ---------- VIGNETTE ---------- */
+.vignette {
+  position: fixed;
+  inset: 0;
+  z-index: 55;
+  pointer-events: none;
+  /* gradient anchored at bottom-center so only sides/bottom darken,
+     not the top — lets the slideshow image show edge-to-edge */
+  background: radial-gradient(
+    150% 120% at 50% 110%,
+    transparent 38%,
+    rgba(0, 0, 0, 0.35) 72%,
+    rgba(0, 0, 0, 0.65) 100%
+  );
+}
+
+/* ---------- UTILITIES ---------- */
+.mono {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--gray-400);
+  font-weight: 500;
+}
+
+/* ---------- SCROLL REVEAL — camera-tilt entry ----------
+   Each section enters with a slight rotateX (tilt toward viewer)
+   that corrects to 0. Combined with translateY = camera tilting
+   down to focus on a new subject. */
+.reveal {
+  opacity: 0;
+  transform: translateY(22px) rotateX(5deg);
+  transform-origin: top center;
+  filter: blur(3px);
+  transition:
+    opacity 0.85s var(--ease-cine),
+    transform 0.85s var(--ease-cine),
+    filter 0.85s var(--ease-cine);
+  transition-delay: var(--delay, 0ms);
+}
+.reveal.in {
+  opacity: 1;
+  transform: translateY(0) rotateX(0);
+  filter: blur(0);
+}
+
+/* ---------- SECTION SCAFFOLD ---------- */
+.section {
+  position: relative;
+  max-width: var(--max-w);
+  margin: 0 auto;
+  padding: var(--section-py) var(--pad);
+  z-index: 1;
+  /* perspective so .reveal rotateX children have real depth on entry */
+  perspective: 1000px;
+}
+.sectionHead {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  margin-bottom: clamp(2.5rem, 6vw, 5rem);
+}
+.sectionIndex {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--gray-400);
+  white-space: nowrap;
+}
+.sectionRule {
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+}
+
+/* ---------- BUTTONS ---------- */
+.btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.9rem 1.7rem;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  font-weight: 500;
+  border: 1px solid var(--border-mid);
+  overflow: hidden;
+  transition: color var(--dur-mid) var(--ease-cine),
+              border-color var(--dur-mid);
+  z-index: 0;
+}
+.btn::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: var(--white);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform var(--dur-mid) var(--ease-cine);
+}
+.btn:hover::before { transform: scaleX(1); }
+.btn:hover { color: var(--black); border-color: var(--white); }
+
+.btnPrimary {
+  background: var(--white);
+  color: var(--black);
+  border-color: var(--white);
+}
+.btnPrimary::before { background: var(--gray-100); }
+.btnPrimary:hover { color: var(--black); }
+
+.btnGhost {
+  color: var(--white);
+}
+
+.btnArrow {
+  display: inline-block;
+  transition: transform var(--dur-mid) var(--ease-cine);
+}
+.btn:hover .btnArrow { transform: translate(3px, -3px); }
+
+/* ---------- PAGE ENTRY (inner pages) ----------
+   Fires on every route change because the route component remounts. */
+.page {
+  animation: pageEnter 0.5s var(--ease-cine) both;
+}
+@keyframes pageEnter {
+  from {
+    opacity: 0;
+    transform: translateY(18px) rotateX(3.5deg);
+    filter: blur(5px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+    filter: blur(0);
+  }
+}
+
+/* ---------- REDUCED MOTION ---------- */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  .reveal,
+  .reveal.in {
+    opacity: 1;
+    transform: none !important;
+    filter: none;
+    transition: none !important;
+  }
+  .grain { display: none; }
+}

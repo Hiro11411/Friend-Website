@@ -1,0 +1,33 @@
+# Secrets
+.env
+.env.local
+.env.*.local
+*.key
+*.pem
+
+# Dependencies & build
+node_modules/
+dist/
+dist-ssr/
+build/
+.cache/
+.parcel-cache/
+.vite/
+
+# TypeScript build cache (generated, not source)
+*.tsbuildinfo
+
+# Claude Code internal files
+.claude/
+
+# Logs
+*.log
+npm-debug.log*
+
+# OS / editor
+.DS_Store
+Thumbs.db
+desktop.ini
+.idea/
+.vscode/
+*.swp

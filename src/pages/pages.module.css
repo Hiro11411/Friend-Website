@@ -1,0 +1,45 @@
+/* Shared inner-page layout */
+.wrap {
+  max-width: var(--max-w);
+  margin: 0 auto;
+  padding: clamp(7rem, 14vh, 10rem) var(--pad) clamp(4rem, 8vw, 7rem);
+}
+
+/* Section divider row */
+.head {
+  display: flex;
+  align-items: center;
+  gap: 1.4rem;
+  margin-bottom: clamp(2.5rem, 6vw, 4.5rem);
+}
+.headIndex {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--gray-500);
+  white-space: nowrap;
+}
+.rule {
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+}
+
+/* Minimal one-line footer */
+.foot {
+  border-top: 1px solid var(--border);
+  margin-top: clamp(4rem, 8vw, 7rem);
+  padding-top: 1.6rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+.footName {
+  font-family: var(--font-display);
+  letter-spacing: 0.1em;
+  font-size: 0.9rem;
+  color: var(--gray-600);
+}

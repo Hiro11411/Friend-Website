@@ -1,0 +1,79 @@
+.slideshow {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: #080808;
+}
+
+/* ── Slides ── */
+.slide {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  opacity: 0;
+  transition: opacity 1.2s ease-in-out;
+}
+.slide.active { opacity: 1; }
+
+/* ── Text overlay ── */
+.slideText {
+  position: absolute;
+  bottom: clamp(2rem, 6vh, 4rem);
+  left: clamp(1.5rem, 5vw, 4rem);
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  pointer-events: none;
+}
+.slideText span {
+  font-family: "Bebas Neue", "Arial Narrow", sans-serif;
+  font-size: clamp(2.4rem, 5.5vw, 5rem);
+  font-weight: 400;
+  line-height: 0.88;
+  letter-spacing: 0.06em;
+  color: rgba(255, 255, 255, 0.92);
+  text-transform: uppercase;
+}
+
+/* ── Navigation arrows ── */
+.nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(0, 0, 0, 0.45);
+  border: 1px solid rgba(255, 255, 255, 0.65);
+  color: #ffffff;
+  cursor: pointer;
+  font-size: 0.95rem;
+  padding: 0.5rem 0.75rem;
+  z-index: 10;
+  transition: background 0.2s ease, border-color 0.2s ease;
+  line-height: 1;
+}
+.nav:hover {
+  background: rgba(0, 0, 0, 0.7);
+  border-color: #ffffff;
+}
+.left  { left: 1.4rem; }
+.right { right: 1.4rem; }
+
+/* ── Counter ── */
+.counter {
+  position: absolute;
+  bottom: 1.5rem;
+  right: 1.8rem;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.72rem;
+  letter-spacing: 0.22em;
+  color: rgba(255, 255, 255, 0.38);
+  z-index: 10;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .slide { transition: none; }
+}
