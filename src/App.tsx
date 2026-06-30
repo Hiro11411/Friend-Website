@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { MainScene } from './scene/MainScene'
 import { Nav } from './components/Nav/Nav'
+import { HeroOverlay } from './components/HeroOverlay'
 import { useReducedMotion } from './hooks/useReducedMotion'
 import type { SectionName } from './scene/types'
 import Slideshow from './components/ui/slideshow'
@@ -11,19 +12,14 @@ export default function App() {
 
   return (
     <>
-      {/* 1 — Canvas (z:1, opaque black). Background for non-hero sections. */}
+      {/* z:1 — Canvas (opaque black background) */}
       <MainScene
         activeSection={section}
         onNavigate={setSection}
         reducedMotion={reducedMotion}
       />
 
-      {/*
-        2 — Slideshow (z:2, above canvas).
-        Visible only at hero; fades out when camera leaves.
-        pointer-events:auto so the ← → buttons are always tappable.
-        NO canvas transparency tricks needed — just z-index layering.
-      */}
+      {/* z:2 — Slideshow images (hero only, fades out on navigate) */}
       <div
         aria-hidden="true"
         style={{
@@ -39,10 +35,15 @@ export default function App() {
         <Slideshow />
       </div>
 
-      {/* 3 — Vignette (z:55, pointer-events:none) */}
+      {/* z:55 — Vignette */}
       <div className="vignette" aria-hidden="true" />
 
-      {/* 4 — Nav (z:100) — transparent, no background, sees slideshow through */}
+      {/* z:60 — Hero text (plain fixed DOM, no drei stacking issues) */}
+      {section === 'hero' && (
+        <HeroOverlay onNavigate={setSection} />
+      )}
+
+      {/* z:100 — Nav */}
       <Nav activeSection={section} onNavigate={setSection} />
     </>
   )

@@ -20,8 +20,8 @@ export function ContactPage() {
           </h1>
 
           <p className={c.copy}>
-            Available for editing, cinematography, and design.
-            Email is the fastest way in.
+            Available for editing and sound design.
+            Either Email or Message my number.
           </p>
 
           <a className={c.email} href="mailto:marcoltc719@gmail.com">

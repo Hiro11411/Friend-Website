@@ -124,23 +124,7 @@ function CameraRig({
 }
 
 /* ─── hero content ───────────────────────────────────────────── */
-function HeroContent({ onNavigate }: { onNavigate: (s: SectionName) => void }) {
-  return (
-    <div className={styles.hero}>
-      <p className={styles.heroEye}>HKAPA &nbsp;·&nbsp; BFA Film &amp; TV</p>
-
-      {/* Clicking the title is the primary CTA — pans to Work */}
-      <h1 className={styles.heroTitle} onClick={() => onNavigate('work')}
-          role="button" tabIndex={0}
-          onKeyDown={e => e.key === 'Enter' && onNavigate('work')}>
-        MARCO<br />LO
-      </h1>
-
-      <p className={styles.heroSub}>Film Editor &amp; Cinematographer</p>
-
-    </div>
-  )
-}
+/* HeroContent moved to src/components/HeroOverlay.tsx (plain fixed DOM overlay) */
 
 /* ─── work content ───────────────────────────────────────────── */
 /* ── Edit these to change the three featured projects ─────────────
@@ -388,19 +372,13 @@ function SceneContent({ activeSection, onNavigate, reducedMotion }: MainScenePro
         onArrival={handleArrival}
       />
 
-      {/* Hero — [0, 0, 0] */}
-      {show('hero') && (
-        <group position={WORLD.hero}>
-          <Html center zIndexRange={[40, 30]} style={{ pointerEvents: 'none' }}>
-            <HeroContent onNavigate={onNavigate} />
-          </Html>
-        </group>
-      )}
+      {/* Hero text is rendered as a plain fixed overlay in App.tsx (HeroOverlay)
+          to avoid drei stacking-context z-index issues. Nothing to render here. */}
 
       {/* Work — [32, 0, 0] */}
       {show('work') && (
         <group position={WORLD.work}>
-          <Html center style={{ pointerEvents: 'auto' }}>
+          <Html center style={{ zIndex: 40, pointerEvents: 'auto' }}>
             <WorkContent onNavigate={onNavigate} />
           </Html>
         </group>
@@ -409,7 +387,7 @@ function SceneContent({ activeSection, onNavigate, reducedMotion }: MainScenePro
       {/* About — [-32, 0, 0] */}
       {show('about') && (
         <group position={WORLD.about}>
-          <Html center style={{ pointerEvents: 'auto' }}>
+          <Html center style={{ zIndex: 40, pointerEvents: 'auto' }}>
             <AboutContent onNavigate={onNavigate} />
           </Html>
         </group>
@@ -418,7 +396,7 @@ function SceneContent({ activeSection, onNavigate, reducedMotion }: MainScenePro
       {/* Contact — [0, -20, 0] */}
       {show('contact') && (
         <group position={WORLD.contact}>
-          <Html center style={{ pointerEvents: 'auto' }}>
+          <Html center style={{ zIndex: 40, pointerEvents: 'auto' }}>
             <ContactContent onNavigate={onNavigate} />
           </Html>
         </group>
